@@ -5,7 +5,7 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import edu.moravian.csci215.mocalendar.databinding.FragmentEventBinding
+//import edu.moravian.csci215.mocalendar.databinding.FragmentEventBinding
 
 
 /**

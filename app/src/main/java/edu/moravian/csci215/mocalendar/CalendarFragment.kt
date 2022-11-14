@@ -50,7 +50,7 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
     private val adapter = CalendarAdapter()
 
     /** The repo for the calendar database */
-    private val repo = CalendarRepository().get()
+    private val repo = CalendarRepository.get()
 
     /** Create the binding view for this layout. */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -147,7 +147,7 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
      * @param event the event to show the details for
      */
     fun showEvent(event: Event) {
-        findNavController().navigate(CalendarFragmentDirections.createEvent())
+        findNavController().navigate(CalendarFragmentDirections.createEvent(event))
     }
 
     /**
@@ -167,7 +167,7 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
      * used for the start time of new events/assignments.
      * @return the start time to use for new events/assignments
      */
-    private fun getStartTime(): Date{
+    private fun getStartTime(): Date {
         val cal = Calendar.getInstance()
         return Date(binding.calendarView.date).combineWithTime(
             createTime(cal[Calendar.HOUR_OF_DAY], 0)
@@ -179,7 +179,7 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
     private inner class CalendarMenuProvider: MenuProvider {
 
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            menuInflater.inflate(R.menu.collectible_list_menu, menu)
+            menuInflater.inflate(R.menu.calendar_fragment_menu, menu)
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -189,10 +189,7 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
                 val event = Event()
 
                 lifecycleScope.launch {
-                    eventsViewModel.addEvent(event)
-
-                    // Open new collectible TODO
-                    findNavController().navigate(CollectibleListFragmentDirections.editCollectible(collectible.id))
+                    addEvent(event)
                 }
                 return true
             }

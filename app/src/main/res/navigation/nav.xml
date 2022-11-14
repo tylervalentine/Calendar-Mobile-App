@@ -17,5 +17,9 @@
     <fragment
         android:id="@+id/eventFragment"
         android:name="edu.moravian.csci215.mocalendar.EventFragment"
-        android:label="EventFragment" />
+        android:label="EventFragment" >
+        <argument
+            android:name="event"
+            app:argType="edu.moravian.csci215.mocalendar.Event" />
+    </fragment>
 </navigation>
