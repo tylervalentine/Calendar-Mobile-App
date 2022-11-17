@@ -1,6 +1,5 @@
 package edu.moravian.csci215.mocalendar
 
-import android.database.DataSetObserver
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -8,7 +7,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.CalendarView
 import android.widget.CalendarView.OnDateChangeListener
-import android.widget.ListAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -18,12 +16,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import edu.moravian.csci215.mocalendar.databinding.EventListItemBinding
 import edu.moravian.csci215.mocalendar.databinding.FragmentCalendarBinding
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * A fragment that displays a calendar, the currently selected date, and a list
@@ -75,10 +76,8 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
         binding.dayList.adapter = adapter
         ItemTouchHelper(SwipeToDeleteCallback()).attachToRecyclerView(binding.dayList)
 
-        // TODO: Add the menu provider to the host activity
         requireActivity().addMenuProvider(CalendarMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        // TODO: Use a coroutine to collect the events from the database (and notify the adapter that things have changed)
         viewLifecycleOwner.lifecycleScope.launch {
             eventsViewModel.events.collect {
                 events = it
@@ -158,7 +157,18 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
      * changed from the default of null).
      */
     private fun createAndAddEventOrAssignment(createEvent: Boolean) {
-        TODO()
+        when(createEvent){
+            true -> {
+                val event = Event(startTime = getStartTime(), endTime = getStartTime().combineWithTime(
+                    createTime(getStartTime().time.hours.toString().toInt() + 1,
+                        getStartTime().time.minutes.toString().toInt())))
+                addEvent(event)
+            }
+            else -> {
+                val assignment = Event(startTime = getStartTime(), type = EventType.ASSIGNMENT)
+                addEvent(assignment)
+            }
+        }
     }
 
     /**
@@ -174,23 +184,28 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
         )
     }
 
-    // TODO: Create and handle the menu for the calendar fragment
-
+    /** Menu Provider for the calendar fragment. */
     private inner class CalendarMenuProvider: MenuProvider {
 
+        /** Inflates the view when the menu is created. */
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menuInflater.inflate(R.menu.calendar_fragment_menu, menu)
         }
 
+        /**
+         * Checks if user wants to create a new event or assignment when an item is selected,
+         * then creates and adds it accordingly.
+         */
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             if (menuItem.itemId == R.id.new_event) {
 
-                // Create new event
-                val event = Event()
+                createAndAddEventOrAssignment(true)
+                return true
+            }
 
-                lifecycleScope.launch {
-                    addEvent(event)
-                }
+            else if (menuItem.itemId == R.id.new_assignment) {
+
+                createAndAddEventOrAssignment(false)
                 return true
             }
             return false
@@ -198,26 +213,31 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
 
     }
 
-    // TODO: Create the adapter and view holders for the RecyclerView
-
     /** The viewholder for a calendar. */
-    private inner class CalendarViewHolder(val binding: FragmentCalendarBinding) : RecyclerView.ViewHolder(binding.root) {
+    private inner class CalendarViewHolder(val binding: EventListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(event: Event) { TODO()
-
+        /** Sets text for event specified. */
+        fun bind(event: Event) {
+            binding.apply {
+                eventTitle.text = event.name
+                eventDescription.text = event.description
+                // icon
+                startTime.text = event.startTime.toTimeString()
+                endTime.text = event.endTime?.toTimeString() ?: "" // FIX ME
+            }
         }
     }
     /** The RecyclerView adapter to show a list of nodes. */
     private inner class CalendarAdapter : RecyclerView.Adapter<CalendarViewHolder>() {
-        /** Creates a new view holder using the list_item_node layout. */
+        /** Creates a new view holder using the event_list_item layout. */
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
-                = CalendarViewHolder(FragmentCalendarBinding.inflate(LayoutInflater.from(parent.context)))
+                = CalendarViewHolder(EventListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-        /** Bind the given view holder to the node at the given position. */
+        /** Bind the given view holder to the event at the given position. */
         override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) =
             holder.bind(events[position])
 
-        /** Get the number of nodes */
+        /** Get the number of events. */
         override fun getItemCount() = events.size
     }
 

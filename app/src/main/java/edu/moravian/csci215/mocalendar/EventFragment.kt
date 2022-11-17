@@ -5,7 +5,7 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-//import edu.moravian.csci215.mocalendar.databinding.FragmentEventBinding
+import edu.moravian.csci215.mocalendar.databinding.FragmentEventBinding
 
 
 /**
@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 class EventFragment : Fragment() {
     /** Binding for the views of the fragment (nullable version) */
     private var _binding: FragmentEventBinding? = null
+
     /** Binding for the views of the fragment (non-nullable accessor) */
     private val binding: FragmentEventBinding
         get() = checkNotNull(_binding) { "Binding is currently null! Oh-uh!" }

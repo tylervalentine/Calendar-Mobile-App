@@ -6,12 +6,14 @@
     <item
         android:id="@+id/new_event"
         android:icon="@drawable/event"
-        app:showAsAction="ifRoom|withText"
-        tools:ignore="MenuTitle" />
+        android:title = "@string/new_event"
+        app:iconTint="?attr/actionMenuTextColor"
+        app:showAsAction="ifRoom|withText" />
 
     <item
-        android:id="@+id/save"
+        android:id="@+id/new_assignment"
+        android:title = "@string/save_event"
         android:icon="@drawable/assignment"
-        app:showAsAction="ifRoom|withText"
-        tools:ignore="MenuTitle" />
+        app:iconTint="?attr/actionMenuTextColor"
+        app:showAsAction="ifRoom|withText" />
 </menu>

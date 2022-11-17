@@ -26,7 +26,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dayList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager" />
 
     <!-- TODO: Add additional views to the fragment layout -->
 

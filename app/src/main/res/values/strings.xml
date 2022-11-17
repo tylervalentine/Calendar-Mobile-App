@@ -18,4 +18,6 @@
     <string name="trophy">Competition</string>
     <string name="present">Presentation</string>
     <string name="holiday">Holiday</string>
+    <string name="new_event">new</string>
+    <string name="save_event">save</string>
 </resources>
