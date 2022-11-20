@@ -3,9 +3,18 @@ package edu.moravian.csci215.mocalendar
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuProvider
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import edu.moravian.csci215.mocalendar.databinding.FragmentEventBinding
+import kotlinx.coroutines.launch
 
 
 /**
@@ -25,10 +34,12 @@ class EventFragment : Fragment() {
      * The arguments passed to this fragment:
      *   - eventID: the event ID to use grab the event to show
      */
-    // TODO
+    private val args: EventFragmentArgs by navArgs()
 
     /** The view model containing the event we are showing/editing */
-    // TODO
+    private val viewModel: EventViewModel by viewModels {
+        EventViewModelFactory(args.event.id)
+    }
 
     /** Create the binding view for this layout. */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -47,23 +58,42 @@ class EventFragment : Fragment() {
         // These are the listeners that don't require the current event to activate
         // These update the event (using the view model) by copying the old event with the one value
         // change as appropriate
+        binding.eventTitle.doOnTextChanged { text, _, _, _ ->
+            viewModel.update { it.copy(name = text.toString()) }
+        }
+
+        binding.eventDescription.doOnTextChanged { text, _, _, _ ->
+            viewModel.update { it.copy(name = text.toString()) }
+        }
 
         // TODO: Add the fragment result listener for the event type being changed
         // The updates the event (using the view model) with a copy of the old event with the type
         // changed using the information from the bundle.
+        setFragmentResultListener() {
+
+        }
 
         // TODO: Add the fragment result listener for the date being changed
         // Updates the event as above but the new event has a changed start and end time which are
         // made by combining the old values with the date in the bundle
+        setFragmentResultListener() {
+
+        }
 
         // TODO: Add the fragment result listener for the start time being changed
         // Updates the event as above but new event has a changed start made by combining the old
         // value with the time in the bundle and a changed end time made utilizing the old start
         // time and the time in the bundle
+        setFragmentResultListener() {
+
+        }
 
         // TODO: Add the fragment result listener for the end time being changed
         // Updates the event as above but new event has a changed end time from the bundle and fixed
         // to be after the start time
+        setFragmentResultListener() {
+
+        }
 
         // Create and add the back pressed callback handler (OnBackPressedCallback)
         // If the event name is empty, a toast is shown with an error, otherwise the callback is disabled
@@ -74,9 +104,16 @@ class EventFragment : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        // TODO: Add the menu provider to the host activity
+        requireActivity().addMenuProvider(CalendarMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         // TODO: Use a coroutine to collect the event from the database
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel."something".collect {
+                    event -> event?.let { updateUI(event) }
+                }
+            }
+        }
     }
 
     /** On destroying the view, clean up the binding. */
@@ -91,7 +128,7 @@ class EventFragment : Fragment() {
      * @return true if the event name is good
      */
     private fun checkEventName(): Boolean {
-        TODO()
+        // TODO()
     }
 
     /**
@@ -110,7 +147,16 @@ class EventFragment : Fragment() {
         TODO()
     }
 
-    // TODO: Create the menu for the event fragment
+    private inner class CalendarMenuProvider : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.calendar_fragment_menu, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            TODO("Not yet implemented")
+        }
+
+    }
 
     /**
      * Updates the UI to match the Event. This also sets click listeners that
