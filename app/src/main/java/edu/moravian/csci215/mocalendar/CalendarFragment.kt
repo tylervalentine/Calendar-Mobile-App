@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.CalendarView
 import android.widget.CalendarView.OnDateChangeListener
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +26,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.DurationUnit
 
 /**
  * A fragment that displays a calendar, the currently selected date, and a list
@@ -146,7 +148,9 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
      * @param event the event to show the details for
      */
     fun showEvent(event: Event) {
-        findNavController().navigate(CalendarFragmentDirections.createEvent(event))
+        viewLifecycleOwner.lifecycleScope.launch {
+            findNavController().navigate(CalendarFragmentDirections.createEvent(event.id))
+        }
     }
 
     /**
@@ -160,8 +164,8 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
         when(createEvent){
             true -> {
                 val event = Event(startTime = getStartTime(), endTime = getStartTime().combineWithTime(
-                    createTime(getStartTime().time.hours.toString().toInt() + 1,
-                        getStartTime().time.minutes.toString().toInt())))
+                    createTime(getStartTime().time.hours.toInt(DurationUnit.HOURS) + 1,
+                        getStartTime().time.minutes.toInt(DurationUnit.MINUTES))))
                 addEvent(event)
             }
             else -> {
@@ -216,14 +220,14 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
     /** The viewholder for a calendar. */
     private inner class CalendarViewHolder(val binding: EventListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        /** Sets text for event specified. */
+        /** Sets text, icon for event specified. */
         fun bind(event: Event) {
             binding.apply {
                 eventTitle.text = event.name
-                eventDescription.text = event.description
-                // icon
+                eventName.text = event.description
+                eventIcon.setImageResource(event.type.iconResourceId)
                 startTime.text = event.startTime.toTimeString()
-                endTime.text = event.endTime?.toTimeString() ?: "" // FIX ME
+                endTime.text = event.endTime?.toTimeString() ?: getString(R.string.empty_string)
             }
         }
     }

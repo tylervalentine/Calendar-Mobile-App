@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/event_description"
+        android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"

@@ -1,7 +1,15 @@
 <resources>
+    <string name="empty_string" />
     <string name="app_name">MoCalendar</string>
     <string name="event_icon">Event Icon</string>
     <string name="event_type">Event Type</string>
+    <string name="event_name">Event or assignment name</string>
+    <string name="at_text">at</string>
+    <string name="till_text">till</string>
+    <string name="new_event">new</string>
+    <string name="save_event">save</string>
+    <string name="delete_event">delete</string>
+    <string name="empty_name_error">Event name cannot be empty!</string>
     <!-- Event Types -->
     <string name="event">Event</string>
     <string name="assignment">Assignment</string>
@@ -18,6 +26,4 @@
     <string name="trophy">Competition</string>
     <string name="present">Presentation</string>
     <string name="holiday">Holiday</string>
-    <string name="new_event">new</string>
-    <string name="save_event">save</string>
 </resources>

@@ -1,10 +1,16 @@
 package edu.moravian.csci215.mocalendar
 
+import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.os.Bundle
 import android.widget.TimePicker
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.navArgs
+import java.util.*
 
 /**
  * A fragment that acts as a popup window for picking a time.
@@ -17,9 +23,9 @@ class TimePickerFragment : DialogFragment(), OnTimeSetListener {
      *     if null, the current time (i.e. now) is used
      *   - isStartTime: boolean if this is being used as the start time or end
      *     time; this is only used during setting the fragment result and does
-     *     not directly effect the behavior od the dialog
+     *     not directly effect the behavior or the dialog
      */
-    // TODO
+    private val args : TimePickerFragmentArgs by navArgs()
 
     /**
      * When the dialog is created, we need to create the appropriate picker (in
@@ -29,7 +35,11 @@ class TimePickerFragment : DialogFragment(), OnTimeSetListener {
      * @return the Dialog to be shown
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        TODO()
+        val cal = Calendar.getInstance()
+        cal.time = args.time.orNow()
+        return TimePickerDialog(
+            requireContext(), this, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), args.isStartTime
+        )
     }
 
     /**
@@ -41,7 +51,18 @@ class TimePickerFragment : DialogFragment(), OnTimeSetListener {
      * @param minute the minute picked
      */
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        TODO()
+        if(args.isStartTime) {
+            setFragmentResult(
+                REQUEST_KEY_START_TIME,
+                bundleOf(BUNDLE_KEY_TIME to createTime(hourOfDay, minute))
+            )
+        }
+        else {
+            setFragmentResult(
+                REQUEST_KEY_END_TIME,
+                bundleOf(BUNDLE_KEY_TIME to createTime(hourOfDay, minute))
+            )
+        }
     }
 
     companion object {

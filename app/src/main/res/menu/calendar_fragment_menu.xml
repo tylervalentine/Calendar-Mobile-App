@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/new_assignment"
-        android:title = "@string/save_event"
+        android:title = "@string/new_event"
         android:icon="@drawable/assignment"
         app:iconTint="?attr/actionMenuTextColor"
         app:showAsAction="ifRoom|withText" />

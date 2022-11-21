@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:gravity="center_horizontal"
-        android:text="TextView"
+        android:text="@string/empty_string"
         android:textSize="34sp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -28,7 +28,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager" />
-
-    <!-- TODO: Add additional views to the fragment layout -->
 
 </LinearLayout>

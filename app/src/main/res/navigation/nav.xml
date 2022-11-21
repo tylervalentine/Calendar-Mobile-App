@@ -17,9 +17,47 @@
     <fragment
         android:id="@+id/eventFragment"
         android:name="edu.moravian.csci215.mocalendar.EventFragment"
-        android:label="EventFragment" >
+        android:label="fragment_event"
+        tools:layout="@layout/fragment_event">
         <argument
             android:name="event"
-            app:argType="edu.moravian.csci215.mocalendar.Event" />
+            app:argType="java.util.UUID" />
+        <action
+            android:id="@+id/change_time"
+            app:destination="@id/timePickerFragment" />
+        <action
+            android:id="@+id/change_date"
+            app:destination="@id/datePickerFragment" />
+        <action
+            android:id="@+id/change_event_type"
+            app:destination="@id/eventTypePickerFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/timePickerFragment"
+        android:name="edu.moravian.csci215.mocalendar.TimePickerFragment"
+        android:label="TimePickerFragment" >
+        <argument
+            android:name="time"
+            app:argType="java.util.Date"
+            app:nullable="true" />
+        <argument
+            android:name="isStartTime"
+            app:argType="boolean" />
+    </dialog>
+    <dialog
+        android:id="@+id/datePickerFragment"
+        android:name="edu.moravian.csci215.mocalendar.DatePickerFragment"
+        android:label="DatePickerFragment" >
+        <argument
+            android:name="date"
+            app:argType="java.util.Date" />
+    </dialog>
+    <dialog
+        android:id="@+id/eventTypePickerFragment"
+        android:name="edu.moravian.csci215.mocalendar.EventTypePickerFragment"
+        android:label="EventTypePickerFragment" >
+        <argument
+            android:name="type"
+            app:argType="string" />
+    </dialog>
 </navigation>
