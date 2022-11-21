@@ -13,6 +13,11 @@
         <action
             android:id="@+id/create_event"
             app:destination="@id/eventFragment" />
+        <argument
+            android:name="date"
+            app:argType="java.util.Date"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/eventFragment"

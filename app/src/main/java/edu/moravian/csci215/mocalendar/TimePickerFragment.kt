@@ -38,7 +38,7 @@ class TimePickerFragment : DialogFragment(), OnTimeSetListener {
         val cal = Calendar.getInstance()
         cal.time = args.time.orNow()
         return TimePickerDialog(
-            requireContext(), this, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), args.isStartTime
+            requireContext(), this, cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), false
         )
     }
 

@@ -148,9 +148,7 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
      * @param event the event to show the details for
      */
     fun showEvent(event: Event) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            findNavController().navigate(CalendarFragmentDirections.createEvent(event.id))
-        }
+        findNavController().navigate(CalendarFragmentDirections.createEvent(event.id))
     }
 
     /**
@@ -164,8 +162,8 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
         when(createEvent){
             true -> {
                 val event = Event(startTime = getStartTime(), endTime = getStartTime().combineWithTime(
-                    createTime(getStartTime().time.hours.toInt(DurationUnit.HOURS) + 1,
-                        getStartTime().time.minutes.toInt(DurationUnit.MINUTES))))
+                    createTime(getStartTime().time.hours.toInt(DurationUnit.HOURS) + 2,
+                        getStartTime().time.minutes.toInt(DurationUnit.MINUTES) - 7)))
                 addEvent(event)
             }
             else -> {
@@ -228,6 +226,9 @@ class CalendarFragment : Fragment(), OnDateChangeListener {
                 eventIcon.setImageResource(event.type.iconResourceId)
                 startTime.text = event.startTime.toTimeString()
                 endTime.text = event.endTime?.toTimeString() ?: getString(R.string.empty_string)
+                root.setOnClickListener {
+                    showEvent(event)
+                }
             }
         }
     }

@@ -41,7 +41,6 @@ android {
         disable 'AllowBackup'
         disable 'DefaultLocale'
         disable 'NotifyDataSetChanged'
-        disable 'ImageContrastCheck'
     }
 }
 

@@ -82,8 +82,8 @@ class EventFragment : Fragment() {
          * made by combining the old values with the date in the bundle.
         */
         setFragmentResultListener(DatePickerFragment.REQUEST_KEY_DATE) { _, bundle ->
-            viewModel.updateEvent { it.copy(startTime = it.startTime.combineWithTime(bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date)) }
-            viewModel.updateEvent { it.copy(endTime = it.endTime?.combineWithTime(bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date)) }
+            viewModel.updateEvent { it.copy(startTime = it.startTime.combineWithDate(bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date)) }
+            viewModel.updateEvent { it.copy(endTime = it.endTime?.combineWithDate(bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date)) }
         }
 
         /**
@@ -93,7 +93,6 @@ class EventFragment : Fragment() {
          */
         setFragmentResultListener(TimePickerFragment.REQUEST_KEY_START_TIME) { _, bundle ->
             viewModel.updateEvent { it.copy(startTime = it.startTime.combineWithTime(bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date))}
-            viewModel.updateEvent { it.copy(endTime = it.endTime?.newEndTime(it.startTime, bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date)) }
         }
 
         /**
@@ -101,7 +100,7 @@ class EventFragment : Fragment() {
          * to be after the start time.
          */
         setFragmentResultListener(TimePickerFragment.REQUEST_KEY_END_TIME) { _, bundle ->
-            viewModel.updateEvent { it.copy(endTime = it.endTime?.combineWithTime(bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date)?.fixTimeToBeAfter(it.startTime))}
+            viewModel.updateEvent { it.copy(endTime = (bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date).fixTimeToBeAfter(it.startTime))}
         }
 
         // Create and add the back pressed callback handler (OnBackPressedCallback)
@@ -113,7 +112,7 @@ class EventFragment : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        requireActivity().addMenuProvider(CalendarMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
+        requireActivity().addMenuProvider(EventMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -166,9 +165,9 @@ class EventFragment : Fragment() {
         }
     }
 
-    private inner class CalendarMenuProvider : MenuProvider {
+    private inner class EventMenuProvider : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            menuInflater.inflate(R.menu.calendar_fragment_menu, menu)
+            menuInflater.inflate(R.menu.event_fragment_menu, menu)
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -197,12 +196,11 @@ class EventFragment : Fragment() {
 
         // Update the views to reflect the event object
 
-        if (binding.eventName.text.toString() != event.name) {
-            binding.eventName.text = event.name
-        }
-        if (binding.description.text.toString() != event.description) {
-            binding.description.text = event.description
-        }
+        if(binding.eventName.text.toString() != event.name)
+            binding.eventName.setText(event.name)
+
+        if(binding.description.text.toString() != event.description)
+            binding.eventName.setText(event.description)
 
         binding.eventIcon.setImageResource(event.type.iconResourceId)
         binding.date.text = event.startTime.toFullDateString()
@@ -217,7 +215,7 @@ class EventFragment : Fragment() {
         {
             binding.till.visibility = View.VISIBLE
             binding.endTime.visibility = View.VISIBLE
-            binding.endTime.text = event.endTime!!.toTimeString()
+            binding.endTime.text = event.endTime?.toTimeString()
         }
 
         // Set up click listeners

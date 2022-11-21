@@ -20,7 +20,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
      *   - date: optional (nullable) Date to use for the initial date shown;
      *     if null, the current date (i.e. now) is used
      */
-    //private val args: DatePickerFragmentArgs by navArgs()
+    // private val args: DatePickerFragmentArgs by navArgs()
 
     /**
      * When the dialog is created, we need to create the appropriate picker (in
@@ -31,7 +31,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val cal = Calendar.getInstance()
-        //cal.time = args.date.orNow()
+        // cal.time = args.date.orNow()
         return DatePickerDialog(
             requireContext(),this,
             cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)

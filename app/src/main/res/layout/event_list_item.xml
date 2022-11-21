@@ -9,6 +9,8 @@
         android:id="@+id/event_icon"
         android:layout_width="51dp"
         android:layout_height="55dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/assignment" />

@@ -4,6 +4,7 @@
     <string name="event_icon">Event Icon</string>
     <string name="event_type">Event Type</string>
     <string name="event_name">Event or assignment name</string>
+    <string name="description_name">The description of the event of assignment</string>
     <string name="at_text">at</string>
     <string name="till_text">till</string>
     <string name="new_event">new</string>
