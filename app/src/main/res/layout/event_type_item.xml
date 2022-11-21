@@ -14,7 +14,8 @@
         android:layout_weight="0"
         android:contentDescription="@string/event_type"
         android:padding="5dp"
-        app:srcCompat="@drawable/event" />
+        app:srcCompat="@drawable/event"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/eventTypeName"
